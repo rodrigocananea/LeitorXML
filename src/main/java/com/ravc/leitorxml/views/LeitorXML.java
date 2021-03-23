@@ -572,7 +572,7 @@ public class LeitorXML extends javax.swing.JFrame {
                         System.out.println("Arquivo encontrado: " + file.getPath());
                         TNfeProc nfe = Tools.readXML(file.getPath());
                         System.out.println("Validação: " 
-                                + nfe != null && nfe.getNFe() != null 
+                                + nfe.getNFe() != null 
                                 ? "Arquivo valido (NFe)" : "Arquivo inválido" );
                         if (nfe != null
                                 && nfe.getNFe() != null) {

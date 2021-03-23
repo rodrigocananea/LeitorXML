@@ -36,7 +36,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Rodrigo
  */
 public class Tools {
-    
+
     public static Image getImage(String name) {
         Image image = null;
         try {
@@ -53,7 +53,7 @@ public class Tools {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return localDateDhEmi.format(formatter);
     }
-    
+
     public static Date asDate(String date) {
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(date);
         return asDate(zonedDateTime.toLocalDateTime());
@@ -209,9 +209,8 @@ public class Tools {
     }
 
     public static double currency(String value) throws ParseException {
-        if (value == null) {
-            return 0.00;
-        } else if (value != null && value.trim().equals("")) {
+        if (value == null
+                || value.trim().equals("")) {
             return 0.00;
         } else {
             value = value.replace("\t", "").trim();
@@ -229,9 +228,8 @@ public class Tools {
     }
 
     public static double currency(String value, String format) throws ParseException {
-        if (value == null) {
-            return 0.00;
-        } else if (value != null && value.trim().equals("")) {
+        if (value == null
+                || value.trim().equals("")) {
             return 0.00;
         } else {
             value = value.replace("\t", "").trim();
@@ -248,8 +246,5 @@ public class Tools {
     public static String currency(BigDecimal value) {
         return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(value);
     }
-    
-    
-    
 
 }
