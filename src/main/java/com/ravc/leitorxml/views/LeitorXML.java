@@ -551,7 +551,7 @@ public class LeitorXML extends javax.swing.JFrame {
                     int progress = 0;
                     int totalProgress = files.size();
                     jpProgress.setMaximum(files.size());
-                    jpProgress.setString("Verificando " + progress + " de " 
+                    jpProgress.setString("Verificando " + progress + " de "
                             + totalProgress + ", aguarde...");
 
                     double vlrProdutos = 0.00;
@@ -571,14 +571,14 @@ public class LeitorXML extends javax.swing.JFrame {
                         System.out.println("-----------------------------------------------------");
                         System.out.println("Arquivo encontrado: " + file.getPath());
                         TNfeProc nfe = Tools.readXML(file.getPath());
-                        System.out.println("Validação: " 
-                                + nfe.getNFe() != null 
-                                ? "Arquivo valido (NFe)" : "Arquivo inválido" );
+                        System.out.println("Validação: "
+                                + nfe.getNFe() != null
+                                ? "Arquivo valido (NFe)" : "Arquivo inválido");
                         if (nfe != null
                                 && nfe.getNFe() != null) {
                             table.addRow(new Object[]{
                                 Tools.asDateZonedDateTime(nfe.getNFe().getInfNFe()
-                                        .getIde().getDhEmi()),
+                                .getIde().getDhEmi()),
                                 nfe.getNFe().getInfNFe().getIde().getSerie()
                                 + " / " + nfe.getNFe().getInfNFe().getIde().getNNF(),
                                 nfe.getNFe().getInfNFe().getEmit().getCPF() == null
@@ -587,7 +587,7 @@ public class LeitorXML extends javax.swing.JFrame {
                                 nfe.getNFe().getInfNFe().getEmit().getXNome(),
                                 nfe.getNFe().getSignature() != null ? "Aprovada" : "Não aprovada",
                                 Tools.currency(Double.valueOf(nfe.getNFe().getInfNFe()
-                                        .getTotal().getICMSTot().getVNF()))
+                                .getTotal().getICMSTot().getVNF()))
                             });
 
                             for (Det produto : nfe.getNFe().getInfNFe().getDet()) {
@@ -597,10 +597,10 @@ public class LeitorXML extends javax.swing.JFrame {
                                         TIpi ipi = (TIpi) e.getValue();
 
                                         if (ipi.getIPITrib() != null) {
-                                            vlrBaseIPI = vlrBaseIPI 
+                                            vlrBaseIPI = vlrBaseIPI
                                                     + Tools.currency(ipi.getIPITrib()
                                                             .getVBC());
-                                            vlrIPI = vlrIPI 
+                                            vlrIPI = vlrIPI
                                                     + Tools.currency(ipi.getIPITrib()
                                                             .getVIPI());
                                         }
@@ -608,49 +608,49 @@ public class LeitorXML extends javax.swing.JFrame {
                                 }
                                 if (jcbCalcProductsDesc.isSelected()
                                         && produto.getProd().getVDesc() != null) {
-                                    vlrDescontos = vlrDescontos 
+                                    vlrDescontos = vlrDescontos
                                             + Double.valueOf(produto.getProd()
                                                     .getVDesc());
                                 }
                             }
 
                             if (!jcbCalcProductsDesc.isSelected()) {
-                                vlrDescontos = vlrDescontos 
+                                vlrDescontos = vlrDescontos
                                         + Double.valueOf(nfe.getNFe().getInfNFe()
                                                 .getTotal().getICMSTot().getVDesc());
                             }
 
-                            vlrProdutos = vlrProdutos 
+                            vlrProdutos = vlrProdutos
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVProd());
-                            vlrTotal = vlrTotal 
+                            vlrTotal = vlrTotal
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVNF());
 
-                            vlrAcrescimos = vlrAcrescimos 
+                            vlrAcrescimos = vlrAcrescimos
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVOutro());
 
-                            vlrBaseICMS = vlrBaseICMS 
+                            vlrBaseICMS = vlrBaseICMS
                                     + Double.valueOf(nfe.getNFe().getInfNFe().
                                             getTotal().getICMSTot().getVBC());
-                            vlrICMS = vlrICMS 
+                            vlrICMS = vlrICMS
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVICMS());
 
-                            vlrBaseICMSST = vlrBaseICMSST 
+                            vlrBaseICMSST = vlrBaseICMSST
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVBCST());
-                            vlrICMSST = vlrICMSST 
+                            vlrICMSST = vlrICMSST
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVST());
 
-                            vlrIPI = vlrIPI 
+                            vlrIPI = vlrIPI
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVIPI());
                         }
 
-                        jpProgress.setString("Verificando " + progress + " de " 
+                        jpProgress.setString("Verificando " + progress + " de "
                                 + totalProgress + ", aguarde...");
                         progress++;
                         jpProgress.setValue(progress);
@@ -675,12 +675,11 @@ public class LeitorXML extends javax.swing.JFrame {
                 System.out.println("Problemas encontrados!");
                 System.out.println("Localização: " + e.getLocalizedMessage());
                 System.out.println("Mensagem: \n" + e.getMessage());
-                JOptionPane.showMessageDialog(this, 
+                JOptionPane.showMessageDialog(this,
                         "Problemas encontrados ao realizar listagem, motivo:\n"
                         + e.getMessage());
 //                e.printStackTrace();
             }
-        }).
-                start();
+        }).start();
     }
 }
