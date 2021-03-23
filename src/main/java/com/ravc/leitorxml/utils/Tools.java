@@ -14,12 +14,8 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -58,98 +54,9 @@ public class Tools {
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(date);
         return asDate(zonedDateTime.toLocalDateTime());
     }
-
-    public static Date asDate(String date, String parser) {
-        Date dateParsed = null;
-        try {
-            if (parser == null) {
-                parser = "yyyy-MM-dd HH:mm:ss";
-            }
-            SimpleDateFormat sdf = new SimpleDateFormat(parser);
-            dateParsed = sdf.parse(date);
-        } catch (ParseException ex) {
-
-        }
-        return dateParsed;
-    }
-
-    public static String asDate(Date date) {
-        String dateFormated = "";
-        if (date != null) {
-            dateFormated = new SimpleDateFormat("dd/MM/yyyy").format(date);
-        }
-        return dateFormated;
-    }
-
-    public static Date asDate(LocalDate localDate) {
-        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-    }
-
+    
     public static Date asDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    public static String asDate(LocalDateTime localDateTime, String format) {
-        String date = "";
-        DateTimeFormatter dtFormatter = null;
-
-        if (format == null) {
-            dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        } else {
-            dtFormatter = DateTimeFormatter.ofPattern(format);
-        }
-
-        if (localDateTime != null) {
-            date = localDateTime.format(dtFormatter);
-        }
-
-        return date;
-    }
-
-    public static String asDate(Date date, String format) {
-        return new SimpleDateFormat(format).format(date);
-    }
-
-    public static String asDate(LocalDate localDate, String format) {
-        String date = "";
-        DateTimeFormatter dtFormatter = null;
-
-        if (format == null) {
-            dtFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        } else {
-            dtFormatter = DateTimeFormatter.ofPattern(format);
-        }
-
-        if (localDate != null) {
-            date = localDate.format(dtFormatter);
-        }
-
-        return date;
-    }
-
-    public static String asDate(LocalDate localDate, DateTimeFormatter format) {
-        String date = "";
-        DateTimeFormatter dtFormatter;
-
-        if (format == null) {
-            dtFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        } else {
-            dtFormatter = format;
-        }
-
-        if (localDate != null) {
-            date = localDate.format(dtFormatter);
-        }
-
-        return date;
-    }
-
-    public static LocalDate asLocalDate(Date date) {
-        return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
-    public static LocalDateTime asLocalDateTime(Date date) {
-        return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public static String formatCNPJ(String valor) {
@@ -192,22 +99,6 @@ public class Tools {
         return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(value);
     }
 
-    public static String currency(double value, String format) {
-        if (format == null
-                || format.equals("")) {
-            format = "#,##0.00";
-        }
-        return new DecimalFormat(format).format(value);
-    }
-
-    public static String currency(BigDecimal value, String format) {
-        if (format == null
-                || format.equals("")) {
-            format = "#,##0.00";
-        }
-        return new DecimalFormat(format).format(value);
-    }
-
     public static double currency(String value) throws ParseException {
         if (value == null
                 || value.trim().equals("")) {
@@ -225,26 +116,6 @@ public class Tools {
 
             return bd.doubleValue();
         }
-    }
-
-    public static double currency(String value, String format) throws ParseException {
-        if (value == null
-                || value.trim().equals("")) {
-            return 0.00;
-        } else {
-            value = value.replace("\t", "").trim();
-            value = value.replace(" ", "").trim();
-            value = value.replace("R$", "").trim();
-            value = value.replace("%", "").trim();
-            NumberFormat nf = NumberFormat.getInstance(Locale.GERMANY);
-            nf.setMinimumFractionDigits(2);
-
-            return nf.parse(value).doubleValue();
-        }
-    }
-
-    public static String currency(BigDecimal value) {
-        return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(value);
     }
 
 }

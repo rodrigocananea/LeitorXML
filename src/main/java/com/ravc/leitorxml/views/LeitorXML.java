@@ -547,6 +547,7 @@ public class LeitorXML extends javax.swing.JFrame {
 
                     List<File> files = Files.list(Paths.get(jtfSearchPath.getSelectedText()))
                             .map(Path::toFile)
+                            .filter(f -> f.getPath().endsWith(".xml"))
                             .collect(Collectors.toList());
                     int progress = 0;
                     int totalProgress = files.size();

@@ -32,6 +32,8 @@ public class App {
         }
         
         java.awt.EventQueue.invokeLater(() -> {
+            System.out.println("Iniciando aplicação!");
+            System.out.println("");
             new LeitorXML().setVisible(true);
         });
     }
