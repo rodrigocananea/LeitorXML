@@ -95,7 +95,7 @@
                         </goals>
                         <configuration>
                             <headerType>console</headerType>
-                            <outfile>target/LeitorXML.exe</outfile>
+                            <outfile>LeitorXML.exe</outfile>
                             <jar>target/LeitorXML.jar</jar>
                             <errTitle>encc</errTitle>
                             <icon>src/main/resources/icons/icons8_view_details_50px.ico</icon>
