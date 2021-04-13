@@ -10,6 +10,10 @@ import br.com.swconsultoria.nfe.schema_4.enviNFe.TNFe.InfNFe.Det;
 import br.com.swconsultoria.nfe.schema_4.enviNFe.TNfeProc;
 import com.ravc.leitorxml.utils.CellRenderer;
 import com.ravc.leitorxml.utils.Tools;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,12 +35,36 @@ import javax.xml.bind.JAXBElement;
  */
 public class LeitorXML extends javax.swing.JFrame {
 
+    private static final Point point = new Point();
     /**
      * Creates new form LeitorXML
      */
     public LeitorXML() {
         initComponents();
         setIconImage(Tools.getImage("icons8_view_details_50px.png"));
+        
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                point.x = e.getX();
+                point.y = e.getY();
+            }
+        });
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                Point p = getLocation();
+                setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
+            }
+        });
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                System.exit(0);
+            }
+        });
+        
         jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 //        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTable.setDefaultEditor(Object.class, null);
@@ -52,12 +80,15 @@ public class LeitorXML extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel4 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jtfSearchPath = new javax.swing.JTextField();
+        jlStatus = new javax.swing.JLabel();
         jbSelectFolder = new javax.swing.JButton();
         jpProgress = new javax.swing.JProgressBar();
         jbListFiles = new javax.swing.JButton();
+        jtfSearchPath = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
@@ -90,29 +121,24 @@ public class LeitorXML extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Leitor de XMLs");
         setBackground(new java.awt.Color(250, 250, 250));
-        setMaximumSize(new java.awt.Dimension(868, 697));
-        setMinimumSize(new java.awt.Dimension(868, 697));
-        setPreferredSize(new java.awt.Dimension(868, 697));
+        setMaximumSize(new java.awt.Dimension(1200, 700));
+        setMinimumSize(new java.awt.Dimension(1200, 700));
+        setPreferredSize(new java.awt.Dimension(1200, 700));
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBackground(new java.awt.Color(235, 235, 235));
+        jPanel4.setBackground(new java.awt.Color(25, 49, 73));
+        jPanel4.setPreferredSize(new java.awt.Dimension(1100, 15));
+        jPanel4.setLayout(null);
+        getContentPane().add(jPanel4, java.awt.BorderLayout.NORTH);
 
-        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel1.setText("Caminho da pasta com os XMLs:");
+        jPanel7.setLayout(new java.awt.BorderLayout());
 
-        jtfSearchPath.setBackground(new java.awt.Color(250, 250, 250));
-        jtfSearchPath.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(51, 153, 255)));
-        jtfSearchPath.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jtfSearchPathFocusGained(evt);
-            }
-        });
-        jtfSearchPath.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfSearchPathActionPerformed(evt);
-            }
-        });
+        jPanel2.setPreferredSize(new java.awt.Dimension(1200, 94));
 
-        jbSelectFolder.setBackground(new java.awt.Color(255, 255, 255));
+        jlStatus.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jlStatus.setForeground(new java.awt.Color(198, 255, 0));
+        jlStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         jbSelectFolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_search_folder_20px.png"))); // NOI18N
         jbSelectFolder.setToolTipText("Selecionar pasta");
         jbSelectFolder.setBorder(null);
@@ -125,8 +151,9 @@ public class LeitorXML extends javax.swing.JFrame {
             }
         });
 
-        jpProgress.setForeground(new java.awt.Color(102, 153, 255));
-        jpProgress.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(235, 235, 235), 3));
+        jpProgress.setBackground(new java.awt.Color(40, 65, 91));
+        jpProgress.setForeground(new java.awt.Color(198, 255, 0));
+        jpProgress.setPreferredSize(new java.awt.Dimension(146, 8));
         jpProgress.setString("");
         jpProgress.setStringPainted(true);
 
@@ -142,6 +169,15 @@ public class LeitorXML extends javax.swing.JFrame {
             }
         });
 
+        jtfSearchPath.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfSearchPathFocusGained(evt);
+            }
+        });
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setText("Caminho da pasta com os XMLs:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -149,43 +185,45 @@ public class LeitorXML extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 610, Short.MAX_VALUE))
-                            .addComponent(jtfSearchPath))
+                        .addComponent(jtfSearchPath)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbSelectFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbListFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jbSelectFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addComponent(jbListFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(0, 1011, Short.MAX_VALUE))
+                    .addComponent(jpProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jbSelectFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfSearchPath, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jbListFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jpProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(9, 9, 9)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtfSearchPath, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbSelectFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbListFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jpProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 7, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.NORTH);
+        jPanel7.add(jPanel2, java.awt.BorderLayout.NORTH);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jScrollPane1.setOpaque(false);
 
+        jTable.setBackground(new java.awt.Color(240, 240, 240));
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -202,41 +240,44 @@ public class LeitorXML extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable.setGridColor(new java.awt.Color(204, 204, 204));
+        jTable.setColumnSelectionAllowed(true);
+        jTable.setDropMode(javax.swing.DropMode.ON);
+        jTable.setGridColor(new java.awt.Color(25, 49, 73));
+        jTable.setOpaque(false);
+        jTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable);
         jTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTable.getColumnModel().getColumnCount() > 0) {
-            jTable.getColumnModel().getColumn(0).setMinWidth(90);
-            jTable.getColumnModel().getColumn(0).setPreferredWidth(90);
-            jTable.getColumnModel().getColumn(0).setMaxWidth(90);
-            jTable.getColumnModel().getColumn(1).setMinWidth(80);
-            jTable.getColumnModel().getColumn(1).setPreferredWidth(80);
-            jTable.getColumnModel().getColumn(1).setMaxWidth(80);
-            jTable.getColumnModel().getColumn(2).setMinWidth(120);
-            jTable.getColumnModel().getColumn(2).setPreferredWidth(120);
-            jTable.getColumnModel().getColumn(2).setMaxWidth(120);
+            jTable.getColumnModel().getColumn(0).setMinWidth(100);
+            jTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+            jTable.getColumnModel().getColumn(0).setMaxWidth(100);
+            jTable.getColumnModel().getColumn(1).setMinWidth(130);
+            jTable.getColumnModel().getColumn(1).setPreferredWidth(130);
+            jTable.getColumnModel().getColumn(1).setMaxWidth(130);
+            jTable.getColumnModel().getColumn(2).setMinWidth(150);
+            jTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+            jTable.getColumnModel().getColumn(2).setMaxWidth(150);
             jTable.getColumnModel().getColumn(3).setMinWidth(100);
             jTable.getColumnModel().getColumn(3).setPreferredWidth(150);
-            jTable.getColumnModel().getColumn(4).setMinWidth(80);
-            jTable.getColumnModel().getColumn(4).setPreferredWidth(80);
-            jTable.getColumnModel().getColumn(4).setMaxWidth(80);
-            jTable.getColumnModel().getColumn(5).setMinWidth(95);
-            jTable.getColumnModel().getColumn(5).setPreferredWidth(95);
-            jTable.getColumnModel().getColumn(5).setMaxWidth(95);
+            jTable.getColumnModel().getColumn(4).setMinWidth(100);
+            jTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+            jTable.getColumnModel().getColumn(4).setMaxWidth(100);
+            jTable.getColumnModel().getColumn(5).setMinWidth(100);
+            jTable.getColumnModel().getColumn(5).setPreferredWidth(100);
+            jTable.getColumnModel().getColumn(5).setMaxWidth(100);
         }
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jPanel7.add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jPanel3.setBackground(new java.awt.Color(235, 235, 235));
-        jPanel3.setPreferredSize(new java.awt.Dimension(400, 120));
+        jPanel3.setPreferredSize(new java.awt.Dimension(400, 150));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
 
-        jPanel5.setBackground(new java.awt.Color(250, 250, 250));
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Totais"));
+        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel5.setPreferredSize(new java.awt.Dimension(995, 120));
 
         jLabel2.setText("Valor Total:");
 
@@ -260,33 +301,43 @@ public class LeitorXML extends javax.swing.JFrame {
 
         jtfVlrProdutos.setEditable(false);
         jtfVlrProdutos.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrProdutos.setFocusable(false);
 
         jtfVlrTotal.setEditable(false);
         jtfVlrTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrTotal.setFocusable(false);
 
         jtfVlrAcrescimos.setEditable(false);
         jtfVlrAcrescimos.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrAcrescimos.setFocusable(false);
 
         jtfVlrDescontos.setEditable(false);
         jtfVlrDescontos.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrDescontos.setFocusable(false);
 
         jtfVlrBaseIPI.setEditable(false);
         jtfVlrBaseIPI.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrBaseIPI.setFocusable(false);
 
         jtfVlrIPI.setEditable(false);
         jtfVlrIPI.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrIPI.setFocusable(false);
 
         jtfVlrBaseICMSST.setEditable(false);
         jtfVlrBaseICMSST.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrBaseICMSST.setFocusable(false);
 
         jtfVlrICMSST.setEditable(false);
         jtfVlrICMSST.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrICMSST.setFocusable(false);
 
         jtfVlrBaseICMS.setEditable(false);
         jtfVlrBaseICMS.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrBaseICMS.setFocusable(false);
 
         jtfVlrICMS.setEditable(false);
         jtfVlrICMS.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jtfVlrICMS.setFocusable(false);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -301,7 +352,7 @@ public class LeitorXML extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtfVlrBaseICMS, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtfVlrICMS, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(jLabel7))
@@ -309,15 +360,15 @@ public class LeitorXML extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtfVlrBaseICMSST, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtfVlrICMSST, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtfVlrBaseIPI, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtfVlrIPI, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 355, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jLabel11))
@@ -325,7 +376,7 @@ public class LeitorXML extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtfVlrDescontos, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtfVlrAcrescimos, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -333,7 +384,7 @@ public class LeitorXML extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtfVlrProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtfVlrTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,14 +436,11 @@ public class LeitorXML extends javax.swing.JFrame {
                                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Principal", jPanel5);
 
-        jPanel6.setBackground(new java.awt.Color(250, 250, 250));
-
-        jcbCalcProductsDesc.setBackground(new java.awt.Color(250, 250, 250));
         jcbCalcProductsDesc.setText("Considerar produtos nos totais de descontos");
         jcbCalcProductsDesc.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jcbCalcProductsDesc.setFocusPainted(false);
@@ -406,21 +454,23 @@ public class LeitorXML extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jcbCalcProductsDesc)
-                .addContainerGap(641, Short.MAX_VALUE))
+                .addContainerGap(952, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jcbCalcProductsDesc)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Opções", jPanel6);
 
         jPanel3.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
+        jPanel7.add(jPanel3, java.awt.BorderLayout.SOUTH);
+
+        getContentPane().add(jPanel7, java.awt.BorderLayout.CENTER);
 
         pack();
         setLocationRelativeTo(null);
@@ -456,10 +506,6 @@ public class LeitorXML extends javax.swing.JFrame {
             jtf.selectAll();
         }
     }//GEN-LAST:event_jtfSearchPathFocusGained
-
-    private void jtfSearchPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfSearchPathActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtfSearchPathActionPerformed
 
     /**
      * @param args the command line arguments
@@ -497,9 +543,9 @@ public class LeitorXML extends javax.swing.JFrame {
 //    };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -511,14 +557,17 @@ public class LeitorXML extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable;
     private javax.swing.JButton jbListFiles;
     private javax.swing.JButton jbSelectFolder;
     private javax.swing.JCheckBox jcbCalcProductsDesc;
+    private javax.swing.JLabel jlStatus;
     private javax.swing.JProgressBar jpProgress;
     private javax.swing.JTextField jtfSearchPath;
     private javax.swing.JTextField jtfVlrAcrescimos;
@@ -538,7 +587,7 @@ public class LeitorXML extends javax.swing.JFrame {
             try {
                 System.out.println("Iniciando listagem de arquivos, aguarde...");
                 System.out.println("");
-                jpProgress.setString("Iniciando listagem de arquivos, aguarde...");
+                jlStatus.setText("Iniciando listagem de arquivos, aguarde...");
                 if (jtfSearchPath.getSelectedText() != null
                         && !jtfSearchPath.getSelectedText().trim().equals("")) {
 
@@ -552,7 +601,7 @@ public class LeitorXML extends javax.swing.JFrame {
                     int progress = 0;
                     int totalProgress = files.size();
                     jpProgress.setMaximum(files.size());
-                    jpProgress.setString("Verificando " + progress + " de "
+                    jlStatus.setText("Verificando " + progress + " de "
                             + totalProgress + ", aguarde...");
 
                     double vlrProdutos = 0.00;
@@ -651,7 +700,7 @@ public class LeitorXML extends javax.swing.JFrame {
                                             .getTotal().getICMSTot().getVIPI());
                         }
 
-                        jpProgress.setString("Verificando " + progress + " de "
+                        jlStatus.setText("Verificando " + progress + " de "
                                 + totalProgress + ", aguarde...");
                         progress++;
                         jpProgress.setValue(progress);
@@ -670,7 +719,7 @@ public class LeitorXML extends javax.swing.JFrame {
                     jtfVlrBaseIPI.setText(Tools.currency(vlrBaseIPI));
                     jtfVlrIPI.setText(Tools.currency(vlrIPI));
                     System.out.println("### Processo finalizado com sucesso! ###");
-                    jpProgress.setString("Processo finalizado com sucesso!");
+                    jlStatus.setText("Processo finalizado com sucesso!");
                 }
             } catch (Exception e) {
                 System.out.println("Problemas encontrados!");

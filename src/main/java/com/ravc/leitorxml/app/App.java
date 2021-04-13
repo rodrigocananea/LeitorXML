@@ -6,7 +6,10 @@
 package com.ravc.leitorxml.app;
 
 import com.ravc.leitorxml.views.LeitorXML;
-import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import mdlaf.MaterialLookAndFeel;
+import mdlaf.themes.MaterialOceanicTheme;
 
 /**
  *
@@ -19,23 +22,19 @@ public class App {
      */
     public static void main(String[] args) {
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if (info.getName().equals("Windows")) {
-                    //if ("Motif".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+            UIManager.setLookAndFeel(new MaterialLookAndFeel());
+            if (UIManager.getLookAndFeel() instanceof MaterialLookAndFeel) {
+                MaterialLookAndFeel.changeTheme(new MaterialOceanicTheme());
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao abrir sistema, motivo:\n" + ex.getMessage(), "Erro ao incializar", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
         }
-        
+
         java.awt.EventQueue.invokeLater(() -> {
             System.out.println("Iniciando aplicação!");
             System.out.println("");
             new LeitorXML().setVisible(true);
         });
     }
-    
+
 }
