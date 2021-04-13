@@ -36,7 +36,7 @@ import javax.xml.bind.JAXBElement;
  * @author Rodrigo
  */
 public class LeitorXML extends javax.swing.JFrame {
-    
+
     private static final Point point = new Point();
     private List<NotaEmpresa> notas;
 
@@ -46,7 +46,7 @@ public class LeitorXML extends javax.swing.JFrame {
     public LeitorXML() {
         initComponents();
         setIconImage(Tools.getImage("icons8_view_details_50px.png"));
-        
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -61,14 +61,14 @@ public class LeitorXML extends javax.swing.JFrame {
                 setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
             }
         });
-        
+
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
                 System.exit(0);
             }
         });
-        
+
         jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 //        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTable.setDefaultEditor(Object.class, null);
@@ -502,10 +502,10 @@ public class LeitorXML extends javax.swing.JFrame {
 
     private void jbSelectFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSelectFolderActionPerformed
         JFileChooser fc = new JFileChooser();
-        
+
         File currentDirectory = new File(System.getProperty("user.dir"));
         fc.setCurrentDirectory(currentDirectory);
-        
+
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int res = fc.showOpenDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {
@@ -625,37 +625,37 @@ public class LeitorXML extends javax.swing.JFrame {
         String serie;
         int numero;
         String cnpjCpf;
-        
+
         public NotaEmpresa() {
-            
+
         }
-        
+
         public String getSerie() {
             return serie;
         }
-        
+
         public void setSerie(String serie) {
             this.serie = serie;
         }
-        
+
         public int getNumero() {
             return numero;
         }
-        
+
         public void setNumero(int numero) {
             this.numero = numero;
         }
-        
+
         public String getCnpjCpf() {
             return cnpjCpf;
         }
-        
+
         public void setCnpjCpf(String cnpjCpf) {
             this.cnpjCpf = cnpjCpf;
         }
-        
+
     }
-    
+
     private void loadTable() {
         new Thread(() -> {
             try {
@@ -664,10 +664,10 @@ public class LeitorXML extends javax.swing.JFrame {
                 jlStatus.setText("Iniciando listagem de arquivos, aguarde...");
                 if (jtfSearchPath.getSelectedText() != null
                         && !jtfSearchPath.getSelectedText().trim().equals("")) {
-                    
+
                     DefaultTableModel table = (DefaultTableModel) jTable.getModel();
                     table.setRowCount(0);
-                    
+
                     List<File> files = Files.list(Paths.get(jtfSearchPath.getSelectedText()))
                             .map(Path::toFile)
                             .filter(f -> f.getPath().endsWith(".xml"))
@@ -677,22 +677,22 @@ public class LeitorXML extends javax.swing.JFrame {
                     jpProgress.setMaximum(files.size());
                     jlStatus.setText("Verificando " + progress + " de "
                             + totalProgress + ", aguarde...");
-                    
+
                     double vlrProdutos = 0.00;
                     double vlrTotal = 0.00;
-                    
+
                     double vlrDescontos = 0.00;
                     double vlrAcrescimos = 0.00;
-                    
+
                     double vlrBaseICMS = 0.00;
                     double vlrICMS = 0.00;
                     double vlrBaseICMSST = 0.00;
                     double vlrICMSST = 0.00;
                     double vlrBaseIPI = 0.00;
                     double vlrIPI = 0.00;
-                    
+
                     notas = new ArrayList<>();
-                    
+
                     for (File file : files) {
                         System.out.println("-----------------------------------------------------");
                         System.out.println("Arquivo encontrado: " + file.getPath());
@@ -702,7 +702,7 @@ public class LeitorXML extends javax.swing.JFrame {
                                 ? "Arquivo valido (NFe)" : "Arquivo inválido");
                         if (nfe != null
                                 && nfe.getNFe() != null) {
-                            
+
                             NotaEmpresa nota = new NotaEmpresa();
                             nota.setNumero(Integer.valueOf(nfe.getNFe().getInfNFe().getIde().getNNF()));
                             nota.setSerie(nfe.getNFe().getInfNFe().getIde().getSerie());
@@ -710,7 +710,7 @@ public class LeitorXML extends javax.swing.JFrame {
                                     ? nfe.getNFe().getInfNFe().getEmit().getCNPJ()
                                     : nfe.getNFe().getInfNFe().getEmit().getCPF());
                             notas.add(nota);
-                            
+
                             table.addRow(new Object[]{
                                 Tools.asDateZonedDateTime(nfe.getNFe().getInfNFe()
                                 .getIde().getDhEmi()),
@@ -724,13 +724,13 @@ public class LeitorXML extends javax.swing.JFrame {
                                 Tools.currency(Double.valueOf(nfe.getNFe().getInfNFe()
                                 .getTotal().getICMSTot().getVNF()))
                             });
-                            
+
                             for (Det produto : nfe.getNFe().getInfNFe().getDet()) {
-                                
+
                                 for (JAXBElement<?> e : produto.getImposto().getContent()) {
                                     if (e.getValue() instanceof TIpi) {
                                         TIpi ipi = (TIpi) e.getValue();
-                                        
+
                                         if (ipi.getIPITrib() != null) {
                                             vlrBaseIPI = vlrBaseIPI
                                                     + Tools.currency(ipi.getIPITrib()
@@ -748,55 +748,55 @@ public class LeitorXML extends javax.swing.JFrame {
                                                     .getVDesc());
                                 }
                             }
-                            
+
                             if (!jcbCalcProductsDesc.isSelected()) {
                                 vlrDescontos = vlrDescontos
                                         + Double.valueOf(nfe.getNFe().getInfNFe()
                                                 .getTotal().getICMSTot().getVDesc());
                             }
-                            
+
                             vlrProdutos = vlrProdutos
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVProd());
                             vlrTotal = vlrTotal
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVNF());
-                            
+
                             vlrAcrescimos = vlrAcrescimos
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVOutro());
-                            
+
                             vlrBaseICMS = vlrBaseICMS
                                     + Double.valueOf(nfe.getNFe().getInfNFe().
                                             getTotal().getICMSTot().getVBC());
                             vlrICMS = vlrICMS
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVICMS());
-                            
+
                             vlrBaseICMSST = vlrBaseICMSST
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVBCST());
                             vlrICMSST = vlrICMSST
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVST());
-                            
+
                             vlrIPI = vlrIPI
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVIPI());
                         }
-                        
+
                         jlStatus.setText("Verificando " + progress + " de "
                                 + totalProgress + ", aguarde...");
                         progress++;
                         jpProgress.setValue(progress);
                     }
-                    
+
                     jtfVlrProdutos.setText(Tools.currency(vlrProdutos));
                     jtfVlrTotal.setText(Tools.currency(vlrTotal));
-                    
+
                     jtfVlrDescontos.setText(Tools.currency(vlrDescontos));
                     jtfVlrAcrescimos.setText(Tools.currency(vlrAcrescimos));
-                    
+
                     jtfVlrBaseICMS.setText(Tools.currency(vlrBaseICMS));
                     jtfVlrICMS.setText(Tools.currency(vlrICMS));
                     jtfVlrBaseICMSST.setText(Tools.currency(vlrBaseICMSST));
@@ -817,7 +817,7 @@ public class LeitorXML extends javax.swing.JFrame {
             }
         }).start();
     }
-    
+
     private void verificarSeq() {
         if (notas.size() > 2) {
             System.out.println("# VERIFICANDO QUEBRA DE SEQUENCIA #");
@@ -837,14 +837,13 @@ public class LeitorXML extends javax.swing.JFrame {
                     quebra.add(seqInicial.get());
                 }
                 seqInicial.getAndIncrement();
-                System.out.println("# NUMERO   : " + n.getNumero());
-                System.out.println("# SEQUENCIA: " + seqInicial.get());
             });
-            
+
             System.out.println("# --------------------------------------");
             System.out.println("# LISTANDO QUEBRAS ");
-            System.out.println("");
-            quebra.stream().forEach(System.out::println);
+            System.out.println("# " + quebra.stream()
+                                        .map(String::valueOf)
+                                        .collect(Collectors.joining(", ")));
         }
     }
 }
