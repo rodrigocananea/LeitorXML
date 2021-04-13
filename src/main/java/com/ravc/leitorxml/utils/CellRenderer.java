@@ -64,7 +64,8 @@ public class CellRenderer extends DefaultTableCellRenderer {
             background = new Color(51, 153, 255);
         }
 
-        if (value instanceof String && String.valueOf(value).length() == 14) {
+        if (table.getColumnModel().getColumnIndex("CNPJ/CPF") == column 
+                && String.valueOf(value).length() == 14) {
             value = Tools.formatCNPJ(String.valueOf(value));
         }
 
