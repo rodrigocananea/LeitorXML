@@ -18,7 +18,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
@@ -34,8 +36,10 @@ import javax.xml.bind.JAXBElement;
  * @author Rodrigo
  */
 public class LeitorXML extends javax.swing.JFrame {
-
+    
     private static final Point point = new Point();
+    private List<NotaEmpresa> notas;
+
     /**
      * Creates new form LeitorXML
      */
@@ -57,7 +61,7 @@ public class LeitorXML extends javax.swing.JFrame {
                 setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
             }
         });
-
+        
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -80,6 +84,8 @@ public class LeitorXML extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        popMenu = new javax.swing.JPopupMenu();
+        jmiVerificarSeq = new javax.swing.JMenuItem();
         jPanel4 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -117,6 +123,15 @@ public class LeitorXML extends javax.swing.JFrame {
         jtfVlrICMS = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jcbCalcProductsDesc = new javax.swing.JCheckBox();
+
+        jmiVerificarSeq.setText("Verificar quebra de sequência");
+        jmiVerificarSeq.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jmiVerificarSeq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiVerificarSeqActionPerformed(evt);
+            }
+        });
+        popMenu.add(jmiVerificarSeq);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Leitor de XMLs");
@@ -245,6 +260,11 @@ public class LeitorXML extends javax.swing.JFrame {
         jTable.setGridColor(new java.awt.Color(25, 49, 73));
         jTable.setOpaque(false);
         jTable.getTableHeader().setReorderingAllowed(false);
+        jTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable);
         jTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTable.getColumnModel().getColumnCount() > 0) {
@@ -293,8 +313,10 @@ public class LeitorXML extends javax.swing.JFrame {
 
         jLabel8.setText("Valor ICMS ST:");
 
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel9.setText("Base IPI:");
 
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel10.setText("Valor IPI:");
 
         jLabel11.setText("Acréscimos:");
@@ -362,13 +384,13 @@ public class LeitorXML extends javax.swing.JFrame {
                     .addComponent(jtfVlrICMSST, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtfVlrBaseIPI, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfVlrIPI, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 355, Short.MAX_VALUE)
+                    .addComponent(jtfVlrIPI, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfVlrBaseIPI, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 339, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jLabel11))
@@ -405,37 +427,35 @@ public class LeitorXML extends javax.swing.JFrame {
                             .addComponent(jtfVlrBaseICMS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jtfVlrICMS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jtfVlrBaseIPI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jtfVlrDescontos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtfVlrIPI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jtfVlrAcrescimos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel5Layout.createSequentialGroup()
-                                    .addComponent(jtfVlrDescontos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jtfVlrProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jtfVlrAcrescimos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jtfVlrTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(6, 6, 6)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jtfVlrProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jtfVlrTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
+                                            .addComponent(jtfVlrBaseIPI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jtfVlrIPI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
 
@@ -482,10 +502,10 @@ public class LeitorXML extends javax.swing.JFrame {
 
     private void jbSelectFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSelectFolderActionPerformed
         JFileChooser fc = new JFileChooser();
-
+        
         File currentDirectory = new File(System.getProperty("user.dir"));
         fc.setCurrentDirectory(currentDirectory);
-
+        
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int res = fc.showOpenDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {
@@ -506,6 +526,22 @@ public class LeitorXML extends javax.swing.JFrame {
             jtf.selectAll();
         }
     }//GEN-LAST:event_jtfSearchPathFocusGained
+
+    private void jTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMouseClicked
+        if (evt.getClickCount() == 1 && evt.getButton() == MouseEvent.BUTTON3) {
+            int col = jTable.columnAtPoint(evt.getPoint());
+            int row = jTable.rowAtPoint(evt.getPoint());
+            if (col != -1 && row != -1) {
+                jTable.setColumnSelectionInterval(col, col);
+                jTable.setRowSelectionInterval(row, row);
+            }
+            popMenu.show(jTable, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_jTableMouseClicked
+
+    private void jmiVerificarSeqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiVerificarSeqActionPerformed
+        verificarSeq();
+    }//GEN-LAST:event_jmiVerificarSeqActionPerformed
 
     /**
      * @param args the command line arguments
@@ -568,6 +604,7 @@ public class LeitorXML extends javax.swing.JFrame {
     private javax.swing.JButton jbSelectFolder;
     private javax.swing.JCheckBox jcbCalcProductsDesc;
     private javax.swing.JLabel jlStatus;
+    private javax.swing.JMenuItem jmiVerificarSeq;
     private javax.swing.JProgressBar jpProgress;
     private javax.swing.JTextField jtfSearchPath;
     private javax.swing.JTextField jtfVlrAcrescimos;
@@ -580,8 +617,45 @@ public class LeitorXML extends javax.swing.JFrame {
     private javax.swing.JTextField jtfVlrIPI;
     private javax.swing.JTextField jtfVlrProdutos;
     private javax.swing.JTextField jtfVlrTotal;
+    private javax.swing.JPopupMenu popMenu;
     // End of variables declaration//GEN-END:variables
 
+    class NotaEmpresa {
+
+        String serie;
+        int numero;
+        String cnpjCpf;
+        
+        public NotaEmpresa() {
+            
+        }
+        
+        public String getSerie() {
+            return serie;
+        }
+        
+        public void setSerie(String serie) {
+            this.serie = serie;
+        }
+        
+        public int getNumero() {
+            return numero;
+        }
+        
+        public void setNumero(int numero) {
+            this.numero = numero;
+        }
+        
+        public String getCnpjCpf() {
+            return cnpjCpf;
+        }
+        
+        public void setCnpjCpf(String cnpjCpf) {
+            this.cnpjCpf = cnpjCpf;
+        }
+        
+    }
+    
     private void loadTable() {
         new Thread(() -> {
             try {
@@ -590,10 +664,10 @@ public class LeitorXML extends javax.swing.JFrame {
                 jlStatus.setText("Iniciando listagem de arquivos, aguarde...");
                 if (jtfSearchPath.getSelectedText() != null
                         && !jtfSearchPath.getSelectedText().trim().equals("")) {
-
+                    
                     DefaultTableModel table = (DefaultTableModel) jTable.getModel();
                     table.setRowCount(0);
-
+                    
                     List<File> files = Files.list(Paths.get(jtfSearchPath.getSelectedText()))
                             .map(Path::toFile)
                             .filter(f -> f.getPath().endsWith(".xml"))
@@ -603,20 +677,22 @@ public class LeitorXML extends javax.swing.JFrame {
                     jpProgress.setMaximum(files.size());
                     jlStatus.setText("Verificando " + progress + " de "
                             + totalProgress + ", aguarde...");
-
+                    
                     double vlrProdutos = 0.00;
                     double vlrTotal = 0.00;
-
+                    
                     double vlrDescontos = 0.00;
                     double vlrAcrescimos = 0.00;
-
+                    
                     double vlrBaseICMS = 0.00;
                     double vlrICMS = 0.00;
                     double vlrBaseICMSST = 0.00;
                     double vlrICMSST = 0.00;
                     double vlrBaseIPI = 0.00;
                     double vlrIPI = 0.00;
-
+                    
+                    notas = new ArrayList<>();
+                    
                     for (File file : files) {
                         System.out.println("-----------------------------------------------------");
                         System.out.println("Arquivo encontrado: " + file.getPath());
@@ -626,6 +702,15 @@ public class LeitorXML extends javax.swing.JFrame {
                                 ? "Arquivo valido (NFe)" : "Arquivo inválido");
                         if (nfe != null
                                 && nfe.getNFe() != null) {
+                            
+                            NotaEmpresa nota = new NotaEmpresa();
+                            nota.setNumero(Integer.valueOf(nfe.getNFe().getInfNFe().getIde().getNNF()));
+                            nota.setSerie(nfe.getNFe().getInfNFe().getIde().getSerie());
+                            nota.setCnpjCpf(nfe.getNFe().getInfNFe().getEmit().getCPF() == null
+                                    ? nfe.getNFe().getInfNFe().getEmit().getCNPJ()
+                                    : nfe.getNFe().getInfNFe().getEmit().getCPF());
+                            notas.add(nota);
+                            
                             table.addRow(new Object[]{
                                 Tools.asDateZonedDateTime(nfe.getNFe().getInfNFe()
                                 .getIde().getDhEmi()),
@@ -639,13 +724,13 @@ public class LeitorXML extends javax.swing.JFrame {
                                 Tools.currency(Double.valueOf(nfe.getNFe().getInfNFe()
                                 .getTotal().getICMSTot().getVNF()))
                             });
-
+                            
                             for (Det produto : nfe.getNFe().getInfNFe().getDet()) {
-
+                                
                                 for (JAXBElement<?> e : produto.getImposto().getContent()) {
                                     if (e.getValue() instanceof TIpi) {
                                         TIpi ipi = (TIpi) e.getValue();
-
+                                        
                                         if (ipi.getIPITrib() != null) {
                                             vlrBaseIPI = vlrBaseIPI
                                                     + Tools.currency(ipi.getIPITrib()
@@ -663,55 +748,55 @@ public class LeitorXML extends javax.swing.JFrame {
                                                     .getVDesc());
                                 }
                             }
-
+                            
                             if (!jcbCalcProductsDesc.isSelected()) {
                                 vlrDescontos = vlrDescontos
                                         + Double.valueOf(nfe.getNFe().getInfNFe()
                                                 .getTotal().getICMSTot().getVDesc());
                             }
-
+                            
                             vlrProdutos = vlrProdutos
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVProd());
                             vlrTotal = vlrTotal
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVNF());
-
+                            
                             vlrAcrescimos = vlrAcrescimos
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVOutro());
-
+                            
                             vlrBaseICMS = vlrBaseICMS
                                     + Double.valueOf(nfe.getNFe().getInfNFe().
                                             getTotal().getICMSTot().getVBC());
                             vlrICMS = vlrICMS
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVICMS());
-
+                            
                             vlrBaseICMSST = vlrBaseICMSST
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVBCST());
                             vlrICMSST = vlrICMSST
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVST());
-
+                            
                             vlrIPI = vlrIPI
                                     + Double.valueOf(nfe.getNFe().getInfNFe()
                                             .getTotal().getICMSTot().getVIPI());
                         }
-
+                        
                         jlStatus.setText("Verificando " + progress + " de "
                                 + totalProgress + ", aguarde...");
                         progress++;
                         jpProgress.setValue(progress);
                     }
-
+                    
                     jtfVlrProdutos.setText(Tools.currency(vlrProdutos));
                     jtfVlrTotal.setText(Tools.currency(vlrTotal));
-
+                    
                     jtfVlrDescontos.setText(Tools.currency(vlrDescontos));
                     jtfVlrAcrescimos.setText(Tools.currency(vlrAcrescimos));
-
+                    
                     jtfVlrBaseICMS.setText(Tools.currency(vlrBaseICMS));
                     jtfVlrICMS.setText(Tools.currency(vlrICMS));
                     jtfVlrBaseICMSST.setText(Tools.currency(vlrBaseICMSST));
@@ -731,5 +816,35 @@ public class LeitorXML extends javax.swing.JFrame {
 //                e.printStackTrace();
             }
         }).start();
+    }
+    
+    private void verificarSeq() {
+        if (notas.size() > 2) {
+            System.out.println("# VERIFICANDO QUEBRA DE SEQUENCIA #");
+            List<Integer> sequencia = new ArrayList<>();
+            List<Integer> quebra = new ArrayList<>();
+            AtomicInteger seqInicial = new AtomicInteger(notas.get(0).getNumero());
+            System.out.println("");
+            System.out.println("# ------------------------------ #");
+            System.out.println("# INICIO: " + seqInicial);
+            System.out.println("# FINAL: " + notas.get(notas.size() - 1).getNumero());
+            System.out.println("# ------------------------------ #");
+            System.out.println("");
+            notas.stream().forEachOrdered((n) -> {
+                sequencia.add(n.getNumero());
+                boolean existe = sequencia.stream().anyMatch(nota -> nota == seqInicial.get());
+                if (!existe) {
+                    quebra.add(seqInicial.get());
+                }
+                seqInicial.getAndIncrement();
+                System.out.println("# NUMERO   : " + n.getNumero());
+                System.out.println("# SEQUENCIA: " + seqInicial.get());
+            });
+            
+            System.out.println("# --------------------------------------");
+            System.out.println("# LISTANDO QUEBRAS ");
+            System.out.println("");
+            quebra.stream().forEach(System.out::println);
+        }
     }
 }
