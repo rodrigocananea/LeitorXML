@@ -405,25 +405,25 @@
                                   <Component id="jtfVlrIPI" min="-2" pref="90" max="-2" attributes="0"/>
                                   <Component id="jtfVlrBaseIPI" min="-2" pref="90" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="339" max="32767" attributes="0"/>
+                              <EmptySpace pref="296" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jtfVlrDescontos" alignment="0" min="-2" pref="90" max="-2" attributes="0"/>
-                                  <Component id="jtfVlrAcrescimos" alignment="0" min="-2" pref="90" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jtfVlrDescontos" pref="110" max="32767" attributes="0"/>
+                                  <Component id="jtfVlrAcrescimos" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel2" alignment="1" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel3" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jtfVlrProdutos" min="-2" pref="90" max="-2" attributes="0"/>
-                                  <Component id="jtfVlrTotal" min="-2" pref="90" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jtfVlrProdutos" pref="121" max="32767" attributes="0"/>
+                                  <Component id="jtfVlrTotal" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
